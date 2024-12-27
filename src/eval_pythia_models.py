@@ -54,11 +54,8 @@ def check_answer_batch(num1, num2, op, responses):
     for response in responses:
         if corr_ans in response:
             num_correct += 1
-        # end if
-    # end for
     
     return num_correct
-# end func
 
 
 def eval_model(A, B, model, tokenizer, op = '+', n_succ = 1, n_max = 1e5, batch_size = 100):
@@ -76,7 +73,6 @@ def eval_model(A, B, model, tokenizer, op = '+', n_succ = 1, n_max = 1e5, batch_
 
     acc = p_sum / m
     return acc
-# end func
 
 
 def eval_model_until(num1, num2, op, model, tokenizer, n_succ = 1, n_max = 1e4, batch_size = 1e2):
@@ -115,7 +111,6 @@ def eval_model_until(num1, num2, op, model, tokenizer, n_succ = 1, n_max = 1e4, 
             # supress warning: Setting `pad_token_id` to `eos_token_id`:0 for open-end generation
             # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
             generated_ids = model.generate(**encoding, do_sample = True, pad_token_id = tokenizer.eos_token_id)
-        # end with
         generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens = True)
 
         # check ans correctness - if True, success counter increases
@@ -125,14 +120,10 @@ def eval_model_until(num1, num2, op, model, tokenizer, n_succ = 1, n_max = 1e4, 
         # if we reached the req number of successes
         if succ_cnt >= n_succ:
             n_iters = (i + 1) * batch_size
-            break
-        # end if
-    # end for
     
     # calc probability
     prob = succ_cnt / n_iters
     return prob
-# end func
 
 
 def load_pythia_model(size, cache_dir = '../HF'):
@@ -151,7 +142,6 @@ def load_pythia_model(size, cache_dir = '../HF'):
     model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir = cache_dir)
     
     return tokenizer, model
-# end func
 
 
 #%% main
@@ -194,7 +184,6 @@ for i in tqdm.tqdm( range(len(model_sizes)) ):
     
     # clear mem
     del model_i, tokenizer_i
-# end for
 print(accs)
 
 
